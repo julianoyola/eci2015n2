@@ -1,0 +1,31 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Sending a postMessage to 
+a Bob's iFrame. This is Bob's part!
+
+-->
+
+<body>
+
+<p id="msg">I've heard nothing yet</p>
+
+<img src="http://bob.com:9090/bob.gif" width="150"> 		
+
+<script>
+function displayMessage (evt) {
+	var message = evt.data + " &larr; " + evt.origin ;
+	document.getElementById("msg").innerHTML = message;
+}
+
+window.addEventListener("message", displayMessage, false);
+</script>
+
+
+
+</body>
+
+</html>

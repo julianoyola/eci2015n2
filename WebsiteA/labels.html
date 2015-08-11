@@ -1,0 +1,116 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Playing with COWL's DC-labels.
+-->
+
+<body>
+
+<h1> DC-labels in COWL </h1>
+
+Some examples:
+
+<ol>
+
+<li> <h3> Creating two labels, one for Facebook and the other one for Google origins </h3>
+
+<script>
+// Creating labels
+var fb = new Label("http://www.facebook.com") ;
+var gl = new Label("http://www.google.com") ;
+
+// Showing them in the web page
+document.write("<br>"+fb+"</br>") ;
+document.write("<br>"+gl+"</br>") ;
+</script> 
+
+</li>
+
+<li> <h3> Do labels allow Facebook to send data to Google? </h3>
+
+<script>
+var fb = new Label("http://www.facebook.com") ;
+var gl = new Label("http://www.google.com") ;
+
+document.write("<br>"+fb.subsumes(gl)+"<br>") ;
+</script>
+</li>
+
+<li> <h3> Conjunction of origins </h3>
+<script>
+var fb = new Label("http://www.facebook.com") ;
+var gl = new Label("http://www.google.com") ;
+
+// Facebook and Google label 
+var fbgl = fb.and(gl) ;     
+
+document.write("<br>"+fbgl+"</br>") ;
+</script>
+</li>
+
+<li> <h3> Disjunction of origins </h3>
+<script>
+var fb = new Label("http://www.facebook.com") ;
+var gl = new Label("http://www.google.com") ;
+
+// Facebook and Google label 
+var fbgl = fb.or(gl) ;     
+
+document.write("<br>"+fbgl+"</br>") ;
+</script>
+</li>
+
+<li> <h3> Conjunctions (&#x22C0;)  and can-flow-to relationship (&#x2291;) </h3>
+<script>
+var fb = new Label("http://www.facebook.com") ;
+var fb1 = new Label("http://www.facebook.com") ;
+var gl = new Label("http://www.google.com") ;
+
+// Facebook and Google label 
+var fbgl = fb.and(gl) ;     
+
+document.write("<br>"+fbgl+" &#x2291; "+gl+"?</br>") ;
+document.write("<br>"+gl.subsumes(fbgl)+"</br>") ;
+
+document.write("<br>"+gl+" &#x2291; "+fbgl+"?</br>") ;
+document.write("<br>"+fbgl.subsumes(gl)+"</br>") ;
+
+document.write("<br>"+fb1+" &#x2291; "+fbgl+"?</br>") ;
+document.write("<br>"+fbgl.subsumes(fb1)+"</br>") ;
+</script>
+</li>
+
+<li> <h3> Disjunctions (&#x22C1;)  and can-flow-to relationship (&#x2291;) </h3>
+<script>
+var fb = new Label("http://www.facebook.com") ;
+var fb1 = new Label("http://www.facebook.com") ;
+var gl = new Label("http://www.google.com") ;
+
+// Facebook and Google label 
+var fbgl = fb.or(gl) ;     
+
+document.write("<br>"+fbgl+" &#x2291; "+gl+"?</br>") ;
+document.write("<br>"+gl.subsumes(fbgl)+"</br>") ;
+
+document.write("<br>"+fbgl+" &#x2291; "+fb+"?</br>") ;
+document.write("<br>"+fb.subsumes(fbgl)+"</br>") ;
+
+
+document.write("<br>"+gl+" &#x2291; "+fbgl+"?</br>") ;
+document.write("<br>"+fbgl.subsumes(gl)+"</br>") ;
+
+document.write("<br>"+fb1+" &#x2291; "+fbgl+"?</br>") ;
+document.write("<br>"+fbgl.subsumes(fb1)+"</br>") ;
+</script>
+</li>
+
+
+</ol>
+
+
+</body>
+
+</html>

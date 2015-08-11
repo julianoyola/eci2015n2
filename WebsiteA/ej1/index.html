@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<h2>Course ECI 2015: Exam</h2>
+	<h3>Julian Oyola (joyola@gmail.com)</h3>
+	
+	<h3>Exercise 1: Privacy labels</h3>
+	
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+	
+	<p>
+	Verify the following privacy assertions (involving &#8849;<sup>C</sup>) in
+	COWL. Implement the assertions using <code>COWL.privacyLabel</code> and calling <code>subsumes</code>
+	on it. Justify why the assertions hold or why they do not.
+	</p>
+	<ol class="list">
+		<li>
+			<code>http://alice.com:8080</code> &#8743; <code>http://bob.com:9090</code> &#8849;<sup>C</sup>	<code>http://bob.com:9090</code>
+			<br/>
+			<iframe src="ej1-1.html" width="400px" height="200px"></iframe>
+			<p>
+			False. The origin requires both Alice and Bob credentials, so data cannot flow to the target which requires just Bob's credentials (thus violating the confidentiality for Alice).
+			<br/>
+			Formally, the predicate <code>Bob &rArr; Bob &and; Alice</code> does not hold true.
+			</p>
+		</li>
+		<li>
+			<code>http://alice.com:8080</code> &#8744; <code>http://bob.com:9090</code> &#8849;<sup>C</sup>	<code>http://bob.com:9090</code>
+			<br/>
+			<iframe src="ej1-2.html" width="400px" height="200px"></iframe>
+			<p>
+			True. The origin requires either Alice or Bob credentials, so data can flow to the target, which requires just Bob's credentials.
+			<br/>
+			Formally, the predicate <code>Bob &rArr; Bob &or; Alice</code> holds true.
+			</p>
+		</li>
+		<li>
+			<code>http://alice.com:8080</code> &#8849;<sup>C</sup> <code>http://bob.com:9090</code> &#8743;	<code>http://charlie.com:5050</code>
+			<br/>
+			<iframe src="ej1-3.html" width="400px" height="200px"></iframe>
+			<p>
+			False. The origin requires Alice credentials, so data cannot flow to a target which exposes the information to third parties like Bob or Charlie.
+			<br/>
+			Formally, the predicate <code>Bob &and; Charlie &rArr; Alice</code> does not hold true.
+			</p>
+		</li>
+		<li>
+			<code>http://alice.com:8080</code> &#8849;<sup>C</sup> <code>http://bob.com:9090</code> &#8744;	<code>http://alice.com:8080</code>
+			<br/>
+			<iframe src="ej1-4.html" width="400px" height="200px"></iframe>
+			<p>
+			False. The origin requires Alice credentials, so data cannot flow to a target which can be read with just Bob's credentials (because of the "or" condition).
+			<br/>
+			Formally, the predicate <code>Bob &or; Alice &rArr; Alice</code> does not hold true.
+			</p>
+		</li>
+		<li>
+			<code>http://bob.com:9090</code> &#8849;<sup>C</sup> <code>http://bob.com:9090</code> &#8743; <code>http://alice.com:8080</code>
+			<br/>
+			<iframe src="ej1-5.html" width="400px" height="200px"></iframe>
+			<p>
+			True. The origin requires Bob credentials, so data can flow to a more restrictive target, which requires Bob's credentials AND also Alice's.
+			<br/>
+			Formally, the predicate <code>Bob &and; Alice &rArr; Bob</code> holds true.
+			</p>
+		</li>
+	</ol>
+
+</body>
+
+</html>

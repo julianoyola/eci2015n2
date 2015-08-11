@@ -1,0 +1,1 @@
+document.write("This is Bob's code running and affecting Alice's page!") ;

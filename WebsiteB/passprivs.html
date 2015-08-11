@@ -1,0 +1,48 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Bob receives Alice's privilege
+
+-->
+
+<body>
+
+<p id="msg">I've heard nothing yet</p>
+<button type="button" onclick="privs()">Bob privileges?</button>
+<p id="BobPrivs"> Not queried </p>
+
+<script>
+COWL.enable() ; 
+
+function displayMessage (evt) {
+	if (! evt.data.privacy) { 
+		// It is a regular message
+		var message = evt.data + " &larr; " + evt.origin ;	
+		document.getElementById("msg").innerHTML = message;	
+	} else {
+		// Taint content to be able to read the blob
+		COWL.privacyLabel = COWL.privacyLabel.and(evt.data.privacy);
+		// Now we can read content and write it to the web page
+		//COWL.privileges = COWL.privileges.and(evt.data.blob)
+		var message = typeof(evt.data.blob) + " &#x219C; " + evt.origin ;
+		document.getElementById("msg").innerHTML = message;	
+	}
+}
+
+window.addEventListener("message", displayMessage, false);
+
+var privs = function() {
+	var privs = COWL.privileges.toString() ; 
+	document.getElementById("BobPrivs").innerHTML = privs;
+} ;
+
+</script>
+
+
+
+</body>
+
+</html>

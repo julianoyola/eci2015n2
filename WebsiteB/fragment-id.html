@@ -1,0 +1,32 @@
+<html>
+
+<head>
+	<script type="text/javascript">
+		numberUiMessages = 0;
+		
+		function sendPipeMessage(){
+			parent.location = "http://alice.com:8080/fragment-id.html#pipeMessage_" + (new Date()).getTime();
+		}
+		
+		var lastId = "";
+		function checkForMessages(){
+			if(location.hash != lastId){
+				lastId = location.hash;
+				numberUiMessages++;
+				document.getElementById("output").innerHTML = "Received message: " + lastId + ", total messages: " + numberUiMessages + "<br>" + document.getElementById("output").innerHTML;
+			}
+		}
+
+		setInterval(checkForMessages, 200);
+	</script>
+
+</head>
+
+<body style="background-color: #FFCCCC">
+	<button onclick="sendPipeMessage()">Send Pipe Message</button>
+	<p>
+		<div id="output"></div>
+	</p>
+
+</body>
+</html>

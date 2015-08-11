@@ -1,0 +1,82 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Sending a postMessage to 
+a Bob's iFrame. COWL
+
+-->
+
+<body>
+
+
+<!-- Bob's iframe -->
+<iframe id="Bob" src="http://bob.com:9090/iframeBob2.html" height="350" align="right"></iframe> 
+
+<br> </br> 
+<p> This is Alice origin. </p>
+<p> Write a message to send to Bob's iframe </p>
+
+
+<form id="AliceForm" action="/">
+	<input type="text" id="AliceMsg" value="Message">
+	<!-- This is important, sending data to the iframe! -->
+	<input type="submit" value="unlabeled postMessage">      
+</form>
+
+<form id="lAliceForm" action="/">
+	<input type="text" id="lAliceMsg" value="Message">
+	<!-- This is important, sending data to the iframe! -->
+	<input type="submit" value="labeled postMessage">      
+</form>
+
+<button type="button" onclick="q_label()">Alice label?</button>
+<p id="AliceLabel"> Not queried </p>
+
+<img src="http://alice.com:8080/alice.gif" width="150">
+
+<script>
+window.onload = function () {
+    COWL.enable(); 
+	
+	<!-- Fetching the message -->
+	var msg = document.getElementById("AliceMsg"),
+		lmsg = document.getElementById("lAliceMsg") ;
+	msg.select();	
+	lmsg.select();	
+	
+    <!-- When submitting the from, i.e., clicking the button -->
+    var form  = document.getElementById("AliceForm"), 	
+		lform = document.getElementById("lAliceForm"),
+		iframeWin = document.getElementById("Bob").contentWindow ;
+		
+	form.onsubmit = function () {
+		iframeWin.postMessage(msg.value, "http://bob.com:9090");
+		return false;
+	};
+	
+	lform.onsubmit = function () {
+	    lmsg = new LabeledBlob(lmsg.value, window.location.origin) ;
+		iframeWin.postMessage(lmsg, "http://bob.com:9090");
+		return false;
+	};
+	
+};
+
+<!-- Obtains the label of the current iFrame -->
+var q_label = function() {
+	var label = COWL.privacyLabel.toString() ; 
+	document.getElementById("AliceLabel").innerHTML = label;
+} ;
+</script>
+
+
+
+
+
+
+</body>
+
+</html>

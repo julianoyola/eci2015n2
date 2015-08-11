@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<p>Charlie's iframe</p>
+
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+
+</body>
+
+</html>

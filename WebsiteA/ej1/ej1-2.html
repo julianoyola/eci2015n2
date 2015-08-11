@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<p>Alice's iframe</p>
+
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+
+	<form id="form1" action="/">
+		<input type="submit" value="Test with ad-hoc Labels (without COWL.privacyLabel)" />
+		<p id="result1" />
+	</form>
+
+	<script>
+		var form1 = document.getElementById("form1");
+		
+		form1.onsubmit = function () {
+			<!-- Load the message -->
+			var msg = "Test message";
+			
+			<!-- Create the Labels -->
+			var labelAlice = new Label("http://alice.com:8080");
+			var labelBob = new Label("http://bob.com:9090");
+			var labelAliceOrBob = labelAlice.or(labelBob);
+			
+			<!-- Test subsumes -->
+			var result = document.getElementById("result1");
+			if (labelBob.subsumes(labelAliceOrBob)) {
+				result.innerHTML = labelBob.toString() + " subsumes " + labelAliceOrBob.toString();
+			} else {
+				result.innerHTML = labelBob.toString() + " does not subsume " + labelAliceOrBob.toString();
+			}
+			
+			return false;
+		}
+	</script>
+
+	<form id="form2" action="/">
+		<input type="submit" value="Test with COWL.privacyLabel" />
+		<p id="result2" />
+	</form>
+
+	<script>
+		var form2 = document.getElementById("form2");
+		
+		form2.onsubmit = function () {
+			<!-- Load the message -->
+			var msg = "Test message";
+			
+			<!-- COWL.privacyLabel -->
+			COWL.privacyLabel = COWL.privacyLabel.and(window.location.origin);
+			var labelAlice = COWL.privacyLabel;
+			
+			<!-- Get Labels -->
+			var iframeBob = document.getElementById("iframeBob");
+			var labelBob = new Label(iframeBob.src);
+			var labelAliceOrBob = labelAlice.or(labelBob);
+			
+			<!-- Test subsumes -->
+			var result = document.getElementById("result2");
+			if (labelBob.subsumes(labelAliceOrBob)) {
+				result.innerHTML = labelBob.toString() + " subsumes " + labelAliceOrBob.toString();
+			} else {
+				result.innerHTML = labelBob.toString() + " does not subsume " + labelAliceOrBob.toString();
+			}
+			
+			return false;
+		}
+	</script>
+
+	<iframe id="iframeBob" src="http://bob.com:9090/ej1/ej1.html" width="200px" height="100px" ></iframe>
+
+</body>
+
+</html>
