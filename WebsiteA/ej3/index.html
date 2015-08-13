@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<h2>Course ECI 2015: Exam</h2>
+	<h3>Julian Oyola (joyola@gmail.com)</h3>
+	
+	<h3>Exercise 3: Privileges</h3>
+
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+
+	<p>
+	As the exercise above, verify the following assertions using COWL. Implement
+	them by creating user-minted privileges and manipulating <code>COWL.privacyLabel</code>,
+	<code>COWL.privileges</code>, and calling <code>subsumes</code>. We note <code>Label()</code> as the security
+	level denoting public data. Justify why the assertions hold or why they do not.
+	We assume two user-minted privileges <code>p1</code> and <code>p2</code>, and the labels obtained from
+	them as <code>l1</code> and <code>l2</code>, respectively.
+	</p>
+
+	<ol class="list">
+		<li>
+			<code>l1</code> &#8743; <code>l2</code> &#8849;<sup>C</sup> <sub><code>p2</code></sub><code>l2</code>
+			<br/>
+			<iframe src="ej3-1.html" width="400px" height="200px"></iframe>
+			<p>
+			False. The privilege p2 can be exercised to remove the label l2, but then l2 does not subsume l1.
+			<br/>
+			Formally, the predicate <code>label(p2) &and; l2 &rArr; l1 &and; l2</code> does not hold true.
+			</p>
+		</li>
+		<li>
+			<code>l1</code> &#8743; <code>l2</code> &#8849;<sup>C</sup> <sub><code>p1</code></sub><code>l2</code>
+			<br/>
+			<iframe src="ej3-2.html" width="400px" height="200px"></iframe>
+			<p>
+			True. The privilege p1 can be exercised to remove the label l1, then data can flow, because l2 subsumes l2.
+			<br/>
+			Formally, the predicate <code>label(p1) &and; l2 &rArr; l1 &and; l2</code> holds true.
+			</p>
+		</li>
+		<li>
+			<code>l1</code> &#8849;<sup>C</sup> <sub><code>p1</code></sub><code>Label()</code>
+			<br/>
+			<iframe src="ej3-3.html" width="400px" height="200px"></iframe>
+			<p>
+			True. The privilege p1 can be exercised to remove the label l1, so the data becomes public and can flow to the target.
+			<br/>
+			Formally, the predicate <code>label(p1) &and; True &rArr; l1 </code> holds true.
+			</p>
+		</li>
+		<li>
+			<code>l1</code> &#8744; <code>l2</code> &#8849;<sup>C</sup> <sub><code>p1</code></sub><code>Label()</code>
+			<br/>
+			<iframe src="ej3-4.html" width="400px" height="200px"></iframe>
+			<p>
+			True. The privilege p1 can be exercised to remove the label l1, thus making useless the need for l2 authorization (because of the OR clause).
+			<br/>
+			Formally, the predicate <code>label(p1) &and; True &rArr; l1 &or; l2 </code> can be simplified to:
+			<code>l1 &rArr; l1 &or; l2 </code>, that holds true.
+			</p>
+		</li>
+		<li>
+			<code>l1</code> &#8743; <code>l2</code> &#8849;<sup>C</sup><sub><code>p1</code> &#8743; <code>p2</code></sub><code>Label()</code>
+			<br/>
+			<iframe src="ej3-5.html" width="400px" height="200px"></iframe>
+			<p>
+			True. The conjunction of the privileges p1 and p2 can be exercised to remove both labels l1 and l2, so the data becomes public and can flow to the target.
+			<br/>
+			Formally, the predicate <code>label(p1) &and; label(p2) &and; True &rArr; l1 &and; l2 </code> holds true.
+			</p>
+		</li>
+		<li>
+			<code>l1</code> &#8743; <code>l2</code> &#8849;<sup>C</sup><sub> <code>p2</code></sub><code>l1</code> &#8744; <code>l2</code>
+			<br/>
+			<iframe src="ej3-6.html" width="400px" height="200px"></iframe>
+			<p>
+			False. The privilege p2 can be exercised to remove the label l2, but the data would flow from an origin that requires l1 authorization, to a target that allows the data to be read by l1 OR l2.
+			<br/>
+			Formally, the predicate <code>label(p2) &and; (l1 &or; l2) &rArr; l1 &and; l2</code> can be simplified to:
+			<code>(l1 &and; l2) &or; l2 &rArr; l1 &and; l2 </code>, that does not hold true.
+			</p>
+		</li>
+	</ol>
+
+</body>
+
+</html>

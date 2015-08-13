@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<p>Alice's iframe</p>
+
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+
+	<form id="form1" action="/">
+		<input type="submit" value="Test privileges (with COWL.privacyLabel and COWL.privileges)" />
+		<p id="result1" />
+	</form>
+
+	<script>
+		var form1 = document.getElementById("form1");
+		
+		form1.onsubmit = function () {
+
+			// IMPORTANT!!
+			// The operation subsumes(Label, Privileges) does not work because of issue:
+			// https://github.com/scslab/cowl/issues/4
+			// This code uses a workaround with COWL.privacyLabel and COWL.privileges.
+
+			<!-- Create the Privileges -->
+			var p1 = new FreshPrivilege();
+			var p2 = new FreshPrivilege();
+
+			<!-- Create the Labels -->
+			var l1 = p1.asLabel;
+			var l2 = p2.asLabel;
+			COWL.privacyLabel = l1;
+			COWL.privacyLabel = COWL.privacyLabel.and(l2);
+			COWL.privileges = p2;
+
+			<!-- Show Privileges and Labels -->
+			var result = document.getElementById("result1");
+			result.innerHTML = 
+				"p1: " + p1.toString() + "<br/>" + 
+				"p2: " + p2.toString() + "<br/>" + 
+				"l1: " + l1.toString() + "<br/>" + 
+				"l2: " + l2.toString() + "<br/>" + 
+				"COWL.privacyLabel: " + COWL.privacyLabel.toString() + "<br/>" + 
+				"COWL.privileges: " + COWL.privileges.toString() + "<br/>";
+			
+			<!-- Prepare result messages -->
+			var l1orl2 = l1.or(l2);
+			var messageTrue = l1orl2.toString() + " subsumes " 
+					+ COWL.privacyLabel.toString() + " with privilege " 
+					+ COWL.privileges.toString();
+			var messageFalse = l1orl2.toString() + " does not subsume " 
+					+ COWL.privacyLabel.toString() + " with privilege " 
+					+ COWL.privileges.toString();
+			
+			<!-- Test subsumes -->
+			//if (l2.subsumes(COWL.privacyLabel, COWL.privileges)) {
+			try {
+				COWL.privacyLabel = l1orl2; // Workaround
+			} catch (e) {
+				alert(e);
+			}
+
+			var test = COWL.privacyLabel.toString() == l1orl2.toString();
+			if (test) {
+				result.innerHTML = result.innerHTML + "<br/>" + messageTrue;
+			} else {
+				result.innerHTML = result.innerHTML + "<br/>" + messageFalse;
+			}
+			
+			return false;
+		}
+	</script>
+
+</body>
+
+</html>

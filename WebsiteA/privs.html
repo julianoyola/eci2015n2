@@ -1,0 +1,46 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Playing with privileges.
+-->
+
+<body>
+
+<h1> User-defined privileges </h1>
+
+<h3> Minted privileges </h3>
+
+<script>
+COWL.enable() ;
+
+var p1 = new FreshPrivilege() ;
+var p2 = new FreshPrivilege() ;
+
+document.write("<br>"+p1.toString()+"</br>") ;
+document.write("<br>"+p2.toString()+"</br>") ;
+
+document.write("<h3> Tests! </h3>") ;
+
+var l1 = p1.asLabel ;
+var l2 = p2.asLabel ;
+
+var land = l1.and(l2) ;
+
+document.write("<br>"+land.toString()+" <h3> &#x2291; </h3> "+l2+"?</br>") ;
+document.write("<br> <h2>"+l2.subsumes(land)+"</h2></br>") ; // This must be false
+
+document.write("<br>"+land+" <h3> &#x2291; </h3>"+l2+"?</br>") ;
+document.write("<br>"+"<b> with privilege: </b> "+p1.asLabel.toString()+"?</br>") ;
+document.write("<br> <h2>"+l2.subsumes(land,p1)+" </h2> </br>") ; //This must be true
+
+</script> 
+
+
+
+
+</body>
+
+</html>

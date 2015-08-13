@@ -34,7 +34,7 @@
 	<p id="cowlStatus" style="font-weight: bold"></p>
 
 	<form id="form1" action="/">
-		<input type="submit" value="Test with ad-hoc Labels (without COWL.privacyLabel)" />
+		<input type="submit" value="Test with ad-hoc Labels (without COWL.trustLabel)" />
 		<p id="result1" />
 	</form>
 
@@ -65,7 +65,7 @@
 	</script>
 
 	<form id="form2" action="/">
-		<input type="submit" value="Test with COWL.privacyLabel" />
+		<input type="submit" value="Test with COWL.trustLabel" />
 		<p id="result2" />
 	</form>
 
@@ -76,9 +76,9 @@
 			<!-- Load the message -->
 			var msg = "Test message";
 			
-			<!-- COWL.privacyLabel -->
-			COWL.privacyLabel = COWL.privacyLabel.and(window.location.origin);
-			var labelAlice = COWL.privacyLabel;
+			<!-- COWL.trustLabel -->
+			COWL.trustLabel = COWL.trustLabel.and(window.location.origin);
+			var labelAlice = COWL.trustLabel;
 			
 			<!-- Get Labels -->
 			var iframeBob = document.getElementById("iframeBob");
