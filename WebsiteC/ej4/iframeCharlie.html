@@ -1,0 +1,65 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Sending a postMessage to 
+a Charlie's iFrame. This is Charlie's part!
+
+-->
+
+<body>
+
+<p id="msg">I've heard nothing yet</p>
+<button type="button" onclick="q_label()">Charlie label?</button>
+<p id="CharlieLabel"> Not queried </p>
+
+<button type="button" onclick="xhr_charlie()"> XHR ping</button>
+<p id="request-result"> </p>
+<img src="http://charlie.com:5050/charlie.jpg" width="150"> 		
+
+<script>
+COWL.enable() ; 
+
+function displayMessage (evt) {
+	if (! evt.data.privacy) { 
+		// It is a regular message
+		var message = evt.data + " &larr; " + evt.origin ;	
+		document.getElementById("msg").innerHTML = message;	
+	} else {
+		// Taint content to be able to read the blob
+		COWL.privacyLabel = COWL.privacyLabel.and(evt.data.privacy);
+		// Now we can read content and write it to the web page
+		var message = evt.data.blob + " &#x219C; " + evt.origin ;
+		document.getElementById("msg").innerHTML = message;	
+	}
+}
+
+window.addEventListener("message", displayMessage, false);
+
+var q_label = function() {
+	var label = COWL.privacyLabel.toString() ; 
+	document.getElementById("CharlieLabel").innerHTML = label;
+} ;
+
+var xhr_charlie = function() {
+	var xmlhttp = new XMLHttpRequest();
+	var url = "http://charlie.com:5050/index.html";
+	
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			document.getElementById("request-result").innerHTML = "Pong!" ;
+        } ;
+	};
+	
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+} ;
+</script>
+
+
+
+</body>
+
+</html>

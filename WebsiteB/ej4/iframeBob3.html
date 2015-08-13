@@ -1,0 +1,101 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Sending a postMessage to 
+a Bob's iFrame. This is Bob's part!
+
+-->
+
+<body>
+
+<!-- Bob's iframe -->
+<iframe id="Charlie" src="http://charlie.com:5050/ej4/iframeCharlie.html" height="400" align="right"></iframe> 
+
+<br> </br> 
+
+<p id="msg">I've heard nothing yet</p>
+<button type="button" onclick="q_label()">Bob label?</button>
+<p id="BobLabel"> Not queried </p>
+
+<button type="button" onclick="xhr_bob()"> XHR ping</button>
+<p id="request-result"> </p>
+<img src="http://bob.com:9090/bob.gif" width="150"> 		
+
+
+<form id="lBobForm" action="/">
+	<input type="text" id="lBobMsg" value="Message">
+	<!-- This is important, sending data to the iframe! -->
+	<input type="submit" value="labeled postMessage">      
+</form>
+
+
+<script>
+COWL.enable() ; 
+
+function displayMessage (evt) {
+	if (! evt.data.privacy) { 
+		// It is a regular message
+		var message = evt.data + " &larr; " + evt.origin ;	
+		document.getElementById("msg").innerHTML = message;	
+	} else {
+		// Taint content to be able to read the blob
+		COWL.privacyLabel = COWL.privacyLabel.and(evt.data.privacy);
+		// Now we can read content and write it to the web page
+		var message = evt.data.blob + " &#x219C; " + evt.origin ;
+		document.getElementById("msg").innerHTML = message;	
+	}
+}
+
+window.addEventListener("message", displayMessage, false);
+
+var q_label = function() {
+	var label = COWL.privacyLabel.toString() ; 
+	document.getElementById("BobLabel").innerHTML = label;
+} ;
+
+var xhr_bob = function() {
+	var xmlhttp = new XMLHttpRequest();
+	var url = "http://bob.com:9090/index.html";
+	
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			document.getElementById("request-result").innerHTML = "Pong!" ;
+        } ;
+	};
+	
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+} ;
+</script>
+
+<script>
+window.onload = function () {
+    COWL.enable(); 
+	
+	<!-- Fetching the message -->
+	var lmsg = document.getElementById("lBobMsg") ;
+	lmsg.select();	
+	
+    <!-- When submitting the from, i.e., clicking the button -->
+    var lform = document.getElementById("lBobForm"),
+		iframeWin = document.getElementById("Charlie").contentWindow ;
+		
+	lform.onsubmit = function () {
+	    var ltext = new LabeledBlob(lmsg.value, window.location.origin) ;
+		iframeWin.postMessage(ltext, "http://charlie.com:5050");
+		return false;
+	};
+	
+};
+
+</script>
+
+
+
+
+</body>
+
+</html>
