@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<h2>Course ECI 2015: Exam</h2>
+	<h3>Julian Oyola (joyola@gmail.com)</h3>
+	
+	<h3>Exercise 6: Bypassing taint analysis</h3>
+
+	<p>
+	In the course, we mentioned that taint analysis is not effective for
+	malicious code. The reason for that is the power that the attacker
+	has to bypass the analysis by exploiting the control flow constructs.
+	</p>
+	<p>
+	In this exercise, you are the attacker who provides malicious code. Your goal is
+	to deploy the function <code>bypass</code> which bypasses the taint analysis. More
+	specifically, you should implement the following function in Python:
+	</p>
+	
+	<pre class="prettyprint">
+	def bypass(some_string):
+	...
+	end
+	</pre>
+	<p>which <strong>always</strong> returns an untainted string.</p>
+	
+	<p>
+	Your function should not be responsible to raise an alarm of the taint analysis. For
+	instance, the following code should run without reporting any problems:
+	</p>
+
+	<pre class="prettyprint">
+	tstring = taint(&quot;This is tainted data&quot;)
+	# If you run tainted(tstring) in the Python prompt, you should see True
+	ustring = bypass(tstring)
+	# Now, ustring should have the same value as tstring but it is not tainted
+	# If you run tainted(ustring) in the Python prompt, you should see False
+	</pre>
+
+
+	<p style="font-weight: bold">
+	The code for this exercise is in folder "ej6", located in the root of the repository.
+	</p>
+
+	
+</body>
+
+</html>
