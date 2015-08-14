@@ -1,0 +1,40 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: When COWL.privacyLabel is "Label()" (i.e., public), resources
+can be loaded from any origin.
+
+-->
+
+<body>
+<br> Trying to get greetings from myself! </br>
+<script>
+COWL.enable(); 
+
+var xmlhttp = new XMLHttpRequest();
+var url = "http://alice.com:8080/index.html";
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+		var iframe = document.createElement('iframe');
+		var html = xmlhttp.responseText;
+		document.body.appendChild(iframe);
+		iframe.contentWindow.document.open();
+		iframe.contentWindow.document.write(html);
+		iframe.contentWindow.document.close();
+    }
+}
+
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+</script> 
+
+<img src="http://bob.com:9090/bob.gif">
+
+</body>
+
+</html>

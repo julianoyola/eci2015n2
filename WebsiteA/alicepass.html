@@ -1,0 +1,55 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Alice's password strength checker. It unsafely embeds 
+untrusted JavaScript code. Problems?
+
+-->
+
+<body>
+
+<img src="http://alice.com:8080/alice.gif" width="150">
+
+<br> </br>
+<label for="pass">Password to check</label>
+<input type="text" id="pass" autocomplete="off">
+<button type="button" onclick="check_pass()">Check</button>
+
+<p id="PassResult"> Strength? </p>
+<p id="CrackT"> Time for cracking it? </p>
+
+<!-- Untrusted password strength checker -->
+<script src='zxcvbn.js'></script>
+
+<script>
+
+var showStrong = function() {
+     document.getElementById("PassResult").innerHTML = "Strong password!";
+} ;
+
+var showWeak = function() {
+     document.getElementById("PassResult").innerHTML = "Weak password!";
+} ;
+
+var check_pass = function() {
+	var msg = document.getElementById("pass").value ; 
+	var result = zxcvbn(msg) ;
+	
+    document.getElementById("CrackT").innerHTML =  result.crack_time_display;
+	
+	if (result.score >= 3) showStrong() ;
+	else showWeak() ;
+} ;
+</script>
+
+
+
+
+
+
+</body>
+
+</html>

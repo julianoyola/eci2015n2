@@ -1,0 +1,67 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Alice's password strength checker. It uses 
+some code from the web, but it confines it to a worker. 
+Therefore, untrusted code cannot leak passwords. 
+
+-->
+
+<head>
+<!-- Loading workers implemented as iFrames -->
+<script src="http://cowl.ws/cowl.js"></script>  
+</head>
+
+<body>
+
+<img src="http://alice.com:8080/alice.gif" width="150">
+
+<br> </br>
+<label for="pass">Password to check</label>
+<input type="text" id="pass" autocomplete="off">
+<button type="button" onclick="check_pass()">Check</button>
+
+<p id="PassResult"> Strength? </p>
+
+
+
+<script>
+COWL.enable(); 
+
+var showStrong = function() {
+     document.getElementById("PassResult").innerHTML = "Strong password!";
+} ;
+
+var showWeak = function() {
+     document.getElementById("PassResult").innerHTML = "Weak password!";
+} ;
+
+var check_pass = function() {
+	var msg = document.getElementById("pass").value, 
+	    passchecker = new LWorker("http://alice.com:8080/integrator.js") ; 
+
+	passchecker.onmessage = function (data) {
+		// When the integrator is ready, the password is sent!
+		if (data == 'ready')  { 
+			var lblob = new LabeledBlob(msg, "http://alice.com:8080") ; 
+			passchecker.postMessage(lblob) ;	
+		} ;
+		
+		if (data === 'strong') showStrong();  
+		if (data == 'weak')    showWeak(); 			
+	} ;	
+
+} ;
+</script>
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<html>
+
+<!-- 
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Alice sends its privilege to 
+Bob!
+
+-->
+
+<body>
+
+
+<!-- Bob's iframe -->
+<iframe id="Bob" src="http://bob.com:9090/passprivs.html" height="350" align="right"></iframe> 
+
+
+<button type="button" onclick="privs()">Alice privileges?</button>
+<p id="AlicePrivs"> Not queried </p>
+
+<button type="button" onclick="pass_privs()">Pass privileges to Bob!</button>
+<p> </p>
+<img src="http://alice.com:8080/alice.gif" width="150">
+
+<script>
+COWL.enable(); 
+
+<!-- Obtains the label of the current iFrame -->
+var privs = function() {
+	var privs = COWL.privileges.toString() ; 
+	document.getElementById("AlicePrivs").innerHTML = privs;
+} ;
+
+var pass_privs = function() {
+	var privs = COWL.privileges,
+	    lblob = new LabeledBlob(privs, "http://bob.com:9090"), 
+		iframeWin = document.getElementById("Bob").contentWindow ;
+
+	iframeWin.postMessage(lblob, "http://bob.com:9090");
+} ;
+</script>
+
+
+
+
+
+
+</body>
+
+</html>

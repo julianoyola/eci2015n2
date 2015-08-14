@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<p>Example: Send XHR request to same origin "http://alice.com:8080/"</p>
+
+	<script src="xhr.js"></script>
+
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+
+			showContextLabel();
+		}
+		
+		function showContextLabel() {
+			var contextLabel = document.getElementById("contextLabel");
+			contextLabel.innerHTML = "Browsing context label: " + COWL.privacyLabel.toString();
+		}
+		
+		function clearContextLabel() {
+			var contextLabel = document.getElementById("contextLabel");
+			contextLabel.innerHTML = "";
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+
+	<form id="form1" action="/">
+		<input type="submit" value="Send XHR to alice.com" />
+		<p id="contextLabel" />
+		<p id="result" />
+	</form>
+
+	<script>
+		var form1 = document.getElementById("form1");
+		
+		form1.onsubmit = function () {
+			var url = "http://alice.com:8080/ej5/resource.html";
+			xhr(url, "GET",
+				function (lblob) {
+					showLabeledBlobInIframe(lblob);
+				},
+				function (errorMessage) {
+					alert(errorMessage);
+				}
+			);
+			
+			return false;
+		}
+
+		function showResourceInIframe(resource) {
+			var iframe = document.getElementById('iframeResult');
+			iframeResult.srcdoc = resource;
+		}
+
+		function showLabeledBlobInIframe(lblob) {
+			//COWL.privacyLabel = COWL.privacyLabel.and(lblob.privacy);
+			var resource = lblob.blob;
+			
+			showResourceInIframe(resource);
+			showContextLabel();
+		}
+	</script>
+	
+	<iframe id="iframeResult" width="200px" height="100px"></iframe>
+
+</body>
+
+</html>

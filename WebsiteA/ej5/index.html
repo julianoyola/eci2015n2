@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 
+	Course ECI 2015: Exam
+	Julian Oyola
+	joyola@gmail.com
+	-->
+</head>
+
+<body>
+
+	<h2>Course ECI 2015: Exam</h2>
+	<h3>Julian Oyola (joyola@gmail.com)</h3>
+	
+	<h3>Exercise 5: Labeled XHR</h3>
+
+	<script>
+	
+		window.onload = function () {
+			var cowlStatus = document.getElementById("cowlStatus");
+			
+			if (window.COWL) {
+				COWL.enable();
+				cowlStatus.innerHTML = "COWL enabled!";
+				cowlStatus.style.color = "green";
+			} else {
+				// It is not a COWL-compatible browser
+				cowlStatus.innerHTML = "Sorry, the example will not run as expected. You need to run it COWL!";
+				cowlStatus.style.color = "red";
+			}
+		}
+		
+	</script>
+
+	<p id="cowlStatus" style="font-weight: bold"></p>
+
+	<p>Implement the idea of Labeled XHR presented in the class room. More
+	specifically, provide the function which takes a URL where to perform a XHR
+	request and returns a labeled blob labeled with the corresponding origin.
+	For example,</p>
+	<pre class="prettyprint">labeledXHR(&quot;http://alice.com:8080/index.html&quot;);</pre>
+	<p>should trigger a XHR request to the origin <code>http://alice.com:8080</code>, and it
+	should send the result as a labeled blob in a postMessage. Importantly,
+	<code>labeledXHR</code> should not raise the browsing context label.
+	</p>
+
+	<iframe src="ej5-normal-xhr-sameorigin.html" width="400px" height="300px"></iframe>
+	<iframe src="ej5-normal-xhr-differentorigin.html" width="400px" height="300px"></iframe>
+	<iframe src="ej5-cowl-xhr.html" width="400px" height="300px"></iframe>
+
+</body>
+
+</html>
